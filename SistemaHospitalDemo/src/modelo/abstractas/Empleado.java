@@ -1,9 +1,9 @@
 package modelo.abstractas;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.Period; // Para retornar años más fácilmente
 
-abstract class Empleado extends Persona {
+public abstract class Empleado extends Persona {
 
     private String legajo;
     private LocalDate fechaContratacion;

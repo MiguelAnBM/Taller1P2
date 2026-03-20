@@ -2,7 +2,7 @@ package modelo.abstractas;
 
 import java.time.LocalDate;
 
-abstract class Persona {
+public abstract class Persona {
 
     private String id;
     private String nombre;
@@ -11,6 +11,7 @@ abstract class Persona {
     private String email;
 
     // Constructor base (Recordar usar super obligatoriamente para acceder aquí)
+    // Lo escribí como setters para validar automáticamente al pasar los argumentos
     public Persona(String id, String nombre, String apellido,
             LocalDate fechaNacimiento, String email) {
 
@@ -26,6 +27,7 @@ abstract class Persona {
     public String getId(){ return id; }
     public String getNombre() { return nombre; }
     public String getApellido() { return apellido; }
+    public String getNombreCompleto() {return nombre + " " + apellido;} // --> Para facilidad futura
     public LocalDate getFechaNacimiento() { return fechaNacimiento; }
     public String getEmail() { return email; }
     
@@ -76,7 +78,7 @@ abstract class Persona {
     // El toString de toda la vida
     @Override
     public String toString() {
-        return obtenerTipo() + " | " + getNombre() + " " + getApellido() + " (ID: " + id + ")";
+        return obtenerTipo() + " | " + getNombreCompleto() + " (ID: " + id + ")";
     }
 
 }
