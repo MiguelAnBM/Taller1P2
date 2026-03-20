@@ -182,7 +182,7 @@ Antes de entregar, verifica:
 
 ## 🚀 Instrucciones de Entrega
 
-1. Crea un repositorio privado en GitHub
+1. Crea un repositorio privado en GitHub haciendo fork al actual 
 2. Sube el código en la estructura de carpetas indicada
 3. Incluye los diagramas en una carpeta `/docs`
 4. Agrega este README.md completo
