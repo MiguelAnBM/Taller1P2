@@ -1,13 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo.enums;
 
-/**
- *
- * @author maygu
- */
-public class EstadoCita {
+public enum EstadoCita {
+    PENDIENTE  ("Pendiente",   "La cita aún no ha sido atendida"),
+    COMPLETADA ("Completada",  "La cita fue atendida con diagnóstico"),
+    CANCELADA  ("Cancelada",   "La cita fue cancelada antes de realizarse");
+
+    private final String estado;
+    private final String descripcion;
+
+    // Constructor
+    EstadoCita(String estado, String descripcion) {
+        this.estado = estado;
+        this.descripcion = descripcion;
+    }
     
+    // — Getters —
+    public String getEstado() { return estado; }
+    public String getDescripcion() { return descripcion; }
+    
+    // — Otros métodos —
+    @Override
+    public String toString() { return estado; }
 }

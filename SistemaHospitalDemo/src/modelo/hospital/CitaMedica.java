@@ -1,13 +1,129 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo.hospital;
 
-/**
- *
- * @author maygu
- */
+import java.time.LocalDateTime;
+
+import modelo.enums.EstadoCita;
+import modelo.personas.Medico;
+import modelo.personas.Paciente;
+
+
 public class CitaMedica {
     
+    private String id;
+    private Paciente paciente; // Asociación con Paciente
+    private Medico medico; // Asociación con Medico
+    private LocalDateTime fechaHora;
+    private String motivo;
+    private EstadoCita estado; // Dependencia con enum EstadoCita
+    private double costo;
+    private Diagnostico diagnostico; // Asociación con Diagnostico
+    
+    // Constructor
+    public CitaMedica(String id, Paciente paciente, Medico medico,
+            LocalDateTime fechaHora, String motivo){
+        
+        setId(id);
+        setPaciente(paciente);
+        setMedico(medico);
+        setFechaHora(fechaHora);
+        setMotivo(motivo);
+        this.estado = EstadoCita.PENDIENTE; // Por defecto es PENDIENTE
+        this.costo = 0; // Por defecto es cero
+        this.diagnostico = null; // Por defecto se encuentra null
+        
+    }
+    
+    // — Getters —
+    public String getId() { return id; }
+    public Paciente getPaciente() { return paciente; }
+    public Medico getMedico() { return medico; }
+    public LocalDateTime getFechaHora() { return fechaHora; }
+    public String getMotivo() { return motivo; }
+    public EstadoCita getEstado() { return estado; }
+    public double getCosto() { return costo; }
+    public Diagnostico getDiagnostico() { return diagnostico; }
+    
+     // — Setters —
+    
+    public void setId(String id){
+        if (id == null || id.isBlank()){
+            throw new IllegalArgumentException("El ID de cita no puede estar vacío.");
+        }
+        this.id = id.trim();
+    }
+    
+    public void setPaciente(Paciente paciente){
+        if (paciente == null){
+            throw new IllegalArgumentException("El paciente no puede ser nulo.");
+        }
+        this.paciente = paciente;
+    }
+    
+    public void setMedico(Medico medico){
+        if (medico == null){
+            throw new IllegalArgumentException("El médico no puede ser nulo.");
+        }
+        this.medico = medico;
+    }
+    
+    public void setFechaHora(LocalDateTime fechaHora){
+        if (fechaHora == null){
+            throw new IllegalArgumentException("La fecha/hora no puede ser nula.");
+        }
+        this.fechaHora = fechaHora;
+    }
+    
+    public void setMotivo(String motivo){
+        if (motivo == null || motivo.isBlank()){
+            throw new IllegalArgumentException("El motivo no puede estar vacío.");
+        }
+        this.motivo = motivo.trim();
+    }
+    
+    /*  
+        No creé setEstado(), setCosto() ni setDiagnostico() porque 
+        son datos que deben ser manipulados únicamente en completar() para
+        mayor seguridad y encapsulamiento
+    */ 
+    
+    // — Otros métodos —
+    public double calcularCosto() {
+        // Por realizar
+        return 0.0;
+    }
+    
+    public void completar(Diagnostico diagnostico) {
+        if (estado != EstadoCita.PENDIENTE) {
+            System.err.println("Cita [" + id + "] no puede completarse. Estado: "
+                    + estado.getEstado());
+            return;
+        }
+        if (diagnostico == null){
+            throw new IllegalArgumentException("Se requiere un diagnóstico para completar la cita.");
+        }
+        this.diagnostico = diagnostico;
+        this.estado = EstadoCita.COMPLETADA;
+        calcularCosto();
+        medico.atenderPaciente(paciente);
+        System.out.println("Cita [" + id + "] completada. Costo: $" + costo);
+    }
+    
+    public void cancelar() {
+        if (estado != EstadoCita.PENDIENTE) {
+            System.err.println("Cita [" + id + "] no puede cancelarse. Estado: "
+                    + estado.getEstado());
+            return;
+        }
+        estado = EstadoCita.CANCELADA;
+        System.out.println("Cita [" + id + "] cancelada. → " + estado.getDescripcion());
+    }
+    
+    // toString() para presentar más bonito los datos :b
+    @Override
+    public String toString() {
+        return "Cita[" + id + "] " + paciente.getNombreCompleto()
+                + " → Dr. " + medico.getNombreCompleto()
+                + " | " + fechaHora + " | " + estado.getEstado();
+    }
 }

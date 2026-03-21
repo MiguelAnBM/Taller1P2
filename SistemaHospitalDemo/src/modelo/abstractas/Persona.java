@@ -10,7 +10,7 @@ public abstract class Persona {
     private LocalDate fechaNacimiento;
     private String email;
 
-    // Constructor base (Recordar usar super obligatoriamente para acceder aquí)
+    // Constructor base
     // Lo escribí como setters para validar automáticamente al pasar los argumentos
     public Persona(String id, String nombre, String apellido,
             LocalDate fechaNacimiento, String email) {
@@ -34,21 +34,21 @@ public abstract class Persona {
     // — Setters con validación —
     public void setId(String id) {
         if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("El ID no puede estar vacío.");
+            throw new IllegalArgumentException("El ID no puede estar vacio.");
         }
         this.id = id.trim(); // Para evitar guardar espacios en blanco
     }
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+            throw new IllegalArgumentException("El nombre no puede estar vacio.");
         }
         this.nombre = nombre.trim();
     }
 
     public void setApellido(String apellido) {
         if (apellido == null || apellido.isBlank()) {
-            throw new IllegalArgumentException("El apellido no puede estar vacío.");
+            throw new IllegalArgumentException("El apellido no puede estar vacio.");
         }
         this.apellido = apellido.trim();
     }
@@ -65,7 +65,7 @@ public abstract class Persona {
 
     public void setEmail(String email) {
         if (email == null || !email.contains("@")) {
-            throw new IllegalArgumentException("Email inválido: " + email);
+            throw new IllegalArgumentException("Email invalido: " + email);
         }
         this.email = email.trim().toLowerCase();
     }

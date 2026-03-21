@@ -19,6 +19,7 @@ public abstract class Empleado extends Persona {
         setFechaContratacion(fechaContratacion);
         setSalarioBase(salarioBase);
         this.activo = true;
+        
     }
     
     // — Getters —
@@ -30,17 +31,17 @@ public abstract class Empleado extends Persona {
     // — Setters con validación —
     public void setLegajo(String legajo) {
         if (legajo == null || legajo.isBlank())
-            throw new IllegalArgumentException("El legajo no puede estar vacío.");
+            throw new IllegalArgumentException("El legajo no puede estar vacio.");
         this.legajo = legajo.trim();
     }
 
     public void setFechaContratacion(LocalDate fecha) {
         if (fecha == null)
-            throw new IllegalArgumentException("La fecha de contratación no puede ser nula.");
+            throw new IllegalArgumentException("La fecha de contratacion no puede ser nula.");
         if (fecha.isAfter(LocalDate.now()))
-            throw new IllegalArgumentException("La fecha de contratación no puede ser futura: " + fecha);
+            throw new IllegalArgumentException("La fecha de contratacion no puede ser futura: " + fecha);
         if (getFechaNacimiento() != null && fecha.isBefore(getFechaNacimiento().plusYears(18)))
-            throw new IllegalArgumentException("El empleado debe tener mínimo 18 años al contratarse.");
+            throw new IllegalArgumentException("El empleado debe tener minimo 18 años al contratarse.");
         this.fechaContratacion = fecha;
     }
 
@@ -54,17 +55,18 @@ public abstract class Empleado extends Persona {
 
     // — Otros métodos —
     
+    // Retorna los años transcurridos desde la fecha de contratación
+    public int antiguedad() {
+        return Period.between(fechaContratacion, LocalDate.now()).getYears();
+    }
+    
+    // — Métodos abstractos Heredados —
     // calcularEdad() implementado aquí para todos los Empleados
     @Override
     public int calcularEdad() {
         return Period.between(getFechaNacimiento(), LocalDate.now()).getYears();
     }
-
-    // Retorna los años transcurridos desde la fecha de contratación
-    public int antiguedad() {
-        return Period.between(fechaContratacion, LocalDate.now()).getYears();
-    }
-
-    // Método abstracto
+    
+    // — Métodos abstractos propios —
     public abstract double calcularSalario();
 }

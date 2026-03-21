@@ -6,16 +6,18 @@ import java.time.Period;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections; // Para copias defensivas
+
 import modelo.abstractas.Persona;
+import modelo.hospital.CitaMedica;
 
 public class Paciente extends Persona {
     
     private String historiaClinicaId;
     private String grupoSanguineo;
     private List<String> alergias;
-    private List<CitaMedica> citas; // Aún no he establecido la relación de asociación con CitaMedica
+    private List<CitaMedica> citas; // Asociación con CitaMedica
     
-    // Constructor base
+    // Constructor
     public Paciente(String id, String nombre, String apellido, LocalDate fechaNacimiento, String email,
                     String historiaClinidaId, String grupoSanguineo) {
         
@@ -24,6 +26,7 @@ public class Paciente extends Persona {
         setGrupoSanguineo(grupoSanguineo);
         this.alergias = new ArrayList<>();
         this.citas = new ArrayList<>();
+        
     }
     
     // Sobrecarga para cuando grupo sanguíneo no esté determinado aún
@@ -44,20 +47,26 @@ public class Paciente extends Persona {
     // — Setters con validación —
     public void setHistoriaClinicaId(String id) {
         if (id == null || id.isBlank())
-            throw new IllegalArgumentException("El ID de historia clínica no puede estar vacío.");
+            throw new IllegalArgumentException("El ID de historia clinica no puede estar vacio.");
         this.historiaClinicaId = id.trim();
     }
 
     public void setGrupoSanguineo(String grupoSanguineo) {
         if (grupoSanguineo == null || grupoSanguineo.isBlank())
-            throw new IllegalArgumentException("El grupo sanguíneo no puede estar vacío.");
+            throw new IllegalArgumentException("El grupo sanguíneo no puede estar vacio.");
         this.grupoSanguineo = grupoSanguineo.trim();
     }
     
-    // — Métodos del negocio — 
+    // — Otros métodos —
+    
+    // Asocia una cita al paciente. Llamado internamente por Hospital.
+    public void agregarCita(CitaMedica cita) {
+        if (cita != null) citas.add(cita);
+    }
+    
     public void agregarAlergia(String alergia) {
         if (alergia == null || alergia.isBlank())
-            throw new IllegalArgumentException("La alergia no puede estar vacía.");
+            throw new IllegalArgumentException("La alergia no puede estar vacia.");
         String a = alergia.trim();
         if (alergias.contains(a))
             System.err.println("Alergia ya registrada: " + a);
@@ -66,12 +75,7 @@ public class Paciente extends Persona {
             System.out.println("Alergia registrada para " + getNombreCompleto() + ": " + a);
         }
     }
-
-    // Asocia una cita al paciente (Se debe llamar internamente por Hospital).
-    void agregarCita(String cita) {
-        if (cita != null) { citas.add(cita); }
-    }
-
+    
     public String obtenerHistorial() {
         /* 
             Usé StringBuilder porque al concatenar con " + " Java crea un nuevo
@@ -80,7 +84,7 @@ public class Paciente extends Persona {
             formateado
         */
         StringBuilder sb = new StringBuilder();
-        sb.append("══ Historial Clínico: ").append(getNombreCompleto()).append(" ══\n");
+        sb.append("══ Historial Clinico: ").append(getNombreCompleto()).append(" ══\n");
         sb.append("HC ID    : ").append(historiaClinicaId).append("\n");
         sb.append("Sangre   : ").append(grupoSanguineo).append("\n");
         sb.append("Edad     : ").append(calcularEdad()).append(" años\n");
@@ -90,7 +94,7 @@ public class Paciente extends Persona {
         return sb.toString();
     }
     
-    // — Métodos abstractos —
+    // — Métodos abstractos Heredados —
     @Override
     public int calcularEdad() { return Period.between(getFechaNacimiento(), LocalDate.now()).getYears(); }
 
