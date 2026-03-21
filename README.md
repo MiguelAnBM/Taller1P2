@@ -1,5 +1,5 @@
-# taller1P2
-evaluación de conocimientos hasta el corte 2
+# Taller1P2
+Evaluación de conocimientos hasta el corte 2
 # 🏥 Sistema de Gestión Hospitalaria (SGH)
 
 &gt; **Asignatura:** Programación Orientada a Objetos  
@@ -50,6 +50,21 @@ Un hospital necesita digitalizar su sistema de gestión. El sistema debe permiti
 | ID | Historia | Prioridad | Story Points |
 |:---|:---|:---:|:---:|
 | **HU-01** | Como **recepcionista**, quiero registrar pacientes para mantener un historial médico digital | Alta | 5 |
+| **HU-02** | Como **recepcionista**, quiero registrar las alergias de un paciente para que el médico tenga esta información antes de atenderlo. | Alta | 3 |
+| **HU-03** | Como **recepcionista**, quiero agendar citas médicas asignando un paciente y un médico disponible con fecha y hora para organizar la atención diaria. | Alta | 8 |
+| **HU-04** | Como **recepcionista**, quiero cancelar una cita pendiente para liberar el espacio en la agenda del médico. | Media | 3 |
+| **HU-05** | Como **administrador**, quiero contratar empleados de diferentes tipos (médico, cirujano, enfermero) para gestionar el personal del hospital | Alta | 5 |
+| **HU-06** | Como **administrador**, quiero calcular la nómina total del hospital sumando los salarios de todos los empleados activos para gestionar el presupuesto mensual | Alta | 5 |
+| **HU-07** | Como **administrador**, quiero registrar especialidades médicas con su costo de consulta para que el sistema calcule los cobros automáticamente. | Alta | 3 |
+| **HU-08** | Como **administrador**, quiero asignar turnos de trabajo (mañana, tarde, noche) a los enfermeros para organizar la cobertura del hospital | Media | 3 |
+| **HU-09** | Como **médico**, quiero registrar el diagnóstico y la receta de una cita para completar la atención del paciente. | Alta | 8 |
+| **HU-10** | Como **médico**, quiero consultar el historial clínico de un paciente incluyendo sus citas anteriores, alergias y grupo sanguíneo para tomar mejores decisiones médicas. | Alta | 5 |
+| **HU-11** | Como **médico**, quiero que el sistema calcule automáticamente el costo de la consulta según mi especialidad para no tener que calcularlo manualmente. | Media | 3 |
+| **HU-12** | Como **cirujano**, quiero registrar las cirugías realizadas para llevar un conteo que se refleje en mi bonificación salarial | Media | 5 |
+| **HU-13** | Como **cirujano**, quiero indicar si estoy disponible para emergencias para que el hospital sepa a quién llamar fuera de horario. | Media | 2 |
+| **HU-14** | Como **enfermero**, quiero registrarme como asistente en una cirugía para que quede constancia de mi participación en el procedimiento. | Baja | 2 |
+| **HU-15** | Como **enfermero**, quiero tener asignados los pacientes a mi cargo para saber a quiénes debo atender durante mi turno. | Media | 3 |
+| **HU-16** | Como **paciente**, quiero consultar mi historial de citas médicas para conocer mis atenciones anteriores y diagnósticos recibidos. | Media | 5 |
 
 
 ---
@@ -133,7 +148,7 @@ Un hospital necesita digitalizar su sistema de gestión. El sistema debe permiti
 1. **Código fuente Java** organizado en la estructura de paquetes indicada
 2. **Diagrama de Casos de Uso** (formato: imagen PNG/JPG o archivo .puml)
 3. **Diagrama de Clases** (formato: imagen PNG/JPG o archivo .puml)
-4. **Historias de Usuario** documentadas en formato tabla (puede incluirse en este README)
+4. **Historias de Usuario** documentadas en formato tabla (puede incluirse en este README) --> ✅ Hecho en este README.
 
 ### Opcionales
 - Documentación JavaDoc en clases públicas
