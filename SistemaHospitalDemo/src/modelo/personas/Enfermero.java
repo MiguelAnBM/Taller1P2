@@ -8,6 +8,7 @@ import java.util.Collections; // Para copias defensivas
 
 import modelo.abstractas.Empleado;
 import modelo.enums.Turno;
+import servicios.Formato;
 
 public class Enfermero extends Empleado {
     
@@ -59,15 +60,31 @@ public class Enfermero extends Empleado {
     
     /*
        calcularSalario() para Enfermero:
-       El recargo se obtiene directamente del enum Turno.
+       El recargo se obtiene directamente del enum Turno mas bono de 5% por antiguedad
     */
     @Override
     public double calcularSalario() {
-        double recargo = getSalarioBase() * turno.getRecargoSalarial();
+        double recargo = getSalarioBase() * turno.getRecargoSalarial() + (antiguedad() * 0.5);
         return getSalarioBase() + recargo;
     }
 
     @Override
     public String obtenerTipo() { return "Enfermero";}
+    
+    @Override
+    public String toString(){
+        return obtenerTipo() + " | " + "(ID: " + getId() + ")" + "\n"
+                         + "Nombre            : " + getNombre() + "\n"
+                         + "Apellido          : " + getApellido() + "\n"
+                         + "FechaNac          : " + getFechaNacimiento() + "\n"
+                         + "Email             : " + getEmail() + "\n"
+                         + "Legajo            : " + getLegajo() + "\n"
+                         + "FechaContratacion : " + getFechaContratacion() + "\n"
+                         + "Antiguedad        : " + antiguedad() + " anos" + "\n"
+                         + "Salario base      : " + Formato.mostrarUnidades(getSalarioBase()) + "\n"
+                         + "Turno             : " + getTurno() + "\n"
+                         + "Area Asignada     : " + getAreaAsignada() + "\n"
+                         + "Pacientes A Cargo : " + getPacientesACargo().size();
+    }
     
 }

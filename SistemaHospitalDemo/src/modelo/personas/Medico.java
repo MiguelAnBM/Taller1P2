@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import modelo.abstractas.Empleado;
 import modelo.hospital.Especialidad;
+import servicios.Formato;
 
 public class Medico extends Empleado {
 
@@ -31,11 +32,8 @@ public class Medico extends Empleado {
 
     // — Getters —
     public String getNumeroLicencia() { return numeroLicencia; }
-
     public Especialidad getEspecialidad() { return especialidad; }
-
     public List<Paciente> getPacientesAsignados() { return Collections.unmodifiableList(pacientesAsignados); } // Copia defensiva más segura
-
     public int getCitasAtendidas() { return citasAtendidas; }
 
     // — Setters con validación —
@@ -82,4 +80,21 @@ public class Medico extends Empleado {
 
     @Override
     public String obtenerTipo() { return "Medico"; } 
+    
+    @Override
+    public String toString(){
+        return obtenerTipo() + " | " + "(ID: " + getId() + ")" + "\n"
+                         + "Nombre              : " + getNombre() + "\n"
+                         + "Apellido            : " + getApellido() + "\n"
+                         + "FechaNac            : " + getFechaNacimiento() + "\n"
+                         + "Email               : " + getEmail() + "\n"
+                         + "Legajo              : " + getLegajo() + "\n"
+                         + "Num.Licencia        : " + getNumeroLicencia() + "\n"
+                         + "Especialidad        : " +  getEspecialidad() + " P/C" + "\n"
+                         + "FechaContratacion   : " + getFechaContratacion() + "\n"
+                         + "Antiguedad          : " + antiguedad() + " anos" + "\n"
+                         + "Salario base        : " + Formato.mostrarUnidades(getSalarioBase()) + "\n"
+                         + "Pacientes Asignados : " + getPacientesAsignados().size() + "\n"
+                         + "Citas Atendidas     : " + getCitasAtendidas();
+    }
 }

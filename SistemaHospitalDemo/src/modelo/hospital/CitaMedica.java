@@ -88,9 +88,12 @@ public class CitaMedica {
     */ 
     
     // — Otros métodos —
+    
+    // Costo base de la especialidad + 10% si ya tiene diagnóstico. 
     public double calcularCosto() {
-        // Por realizar
-        return 0.0;
+        double base = medico.getEspecialidad().getCostoConsulta();
+        costo = (diagnostico != null) ? base * 1.10 : base;
+        return costo;
     }
     
     public void completar(Diagnostico diagnostico) {
@@ -105,7 +108,7 @@ public class CitaMedica {
         this.diagnostico = diagnostico;
         this.estado = EstadoCita.COMPLETADA;
         calcularCosto();
-        medico.atenderPaciente(paciente);
+        medico.atenderPaciente(paciente); // Asociación con Médico
         System.out.println("Cita [" + id + "] completada. Costo: $" + Formato.mostrarUnidades(costo));
     }
     
@@ -122,8 +125,11 @@ public class CitaMedica {
     // toString() para presentar más bonito los datos :b
     @Override
     public String toString() {
-        return "Cita[" + id + "] " + paciente.getNombreCompleto()
-                + " --> Dr. " + medico.getNombreCompleto()
-                + " | " + fechaHora + " | " + estado.getEstado();
+        return "Cita[" + id + "] "
+             + "Paciente     :" + paciente.getNombreCompleto() + "\n"
+             + "Doctor       :" + medico.getNombreCompleto() + "\n"
+             + "Fecha y Hora :" + fechaHora + "\n"
+             + "Estado       :" + estado.getEstado() + "\n"
+             + "Costo:       "  + ((estado == EstadoCita.COMPLETADA) ? costo : "Por definir");
     }
 }

@@ -82,7 +82,7 @@ public class Hospital {
     
     /*
         COMPOSICIÓN: el Hospital crea la CitaMedica.
-        Establece la ASOCIACIÓN bidireccional CitaMedica ↔ Paciente.
+        Establece la ASOCIACIÓN  CitaMedica ↔ Paciente.
     */
     public CitaMedica agendarCita(String id, Paciente paciente, Medico medico,
                                    LocalDateTime fechaHora, String motivo) {

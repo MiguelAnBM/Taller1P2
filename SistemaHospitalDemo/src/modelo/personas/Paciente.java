@@ -83,14 +83,17 @@ public class Paciente extends Persona {
             formateado
         */
         StringBuilder sb = new StringBuilder();
-        sb.append("══ Historial Clinico: ").append(getNombreCompleto()).append(" ══\n");
+        sb.append("--- Historial Clinico: ").append(getNombreCompleto()).append(" ---\n");
         sb.append("HC ID    : ").append(historiaClinicaId).append("\n");
-        sb.append("Sangre   : ").append(grupoSanguineo).append("\n");
-        sb.append("Edad     : ").append(calcularEdad()).append(" años\n");
+        sb.append("RH       : ").append(grupoSanguineo).append("\n");
+        sb.append("Edad     : ").append(calcularEdad()).append(" anos\n");
         sb.append("Alergias : ").append(alergias.isEmpty() ? "Ninguna" : String.join(", ", alergias)).append("\n");
         sb.append("Citas    : ").append(citas.size()).append("\n");
-        // c representa cada cita
-        citas.forEach(c -> sb.append("  --> ").append(c).append("\n"));
+        for (CitaMedica cita : citas) {
+            System.out.println("");
+            System.out.println(cita);
+        }
+        
         return sb.toString();
     }
     
@@ -98,4 +101,16 @@ public class Paciente extends Persona {
     @Override
     public String obtenerTipo() { return "Paciente"; } // --> Polimorfismo :D
     
+    // — Otros Métodos —
+    
+    @Override
+    public String toString() {
+        return obtenerTipo() + " | " + "(ID: " + getId() + ")" + "\n"
+                         + "Nombre   : " + getNombre() + "\n"
+                         + "Apellido : " + getApellido() + "\n"
+                         + "FechaNac : " + getFechaNacimiento() + "\n"
+                         + "Email    : " + getEmail() + "\n"
+                         + "HC ID    : " + getHistoriaClinicaId() + "\n"
+                         + "RH       : " + getGrupoSanguineo();
+    }
 }

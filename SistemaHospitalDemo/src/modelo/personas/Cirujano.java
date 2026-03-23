@@ -4,6 +4,7 @@ package modelo.personas;
 import java.time.LocalDate;
 
 import modelo.hospital.Especialidad;
+import servicios.Formato;
 
 
 public class Cirujano extends Medico {
@@ -50,13 +51,30 @@ public class Cirujano extends Medico {
     // — Métodos abstractos Heredados —
     /*
       calcularSalario() para Cirujano:
-      Hereda la lógica de Medico (super) y le suma el bono quirúrgico.
+      Hereda la lógica de Medico (super) y le suma el bono quirúrgico y 5% por antiguedad
     */
     @Override
     public double calcularSalario() {
-        return super.calcularSalario() + calcularBono();
+        return super.calcularSalario() + calcularBono() + (antiguedad() * 0.5);
     }
 
     @Override
     public String obtenerTipo() { return "Cirujano"; }
+    
+    @Override
+    public String toString(){
+        return obtenerTipo() + " | " + "(ID: " + getId() + ")" + "\n"
+                         + "Nombre              : " + getNombre() + "\n"
+                         + "Apellido            : " + getApellido() + "\n"
+                         + "FechaNac            : " + getFechaNacimiento() + "\n"
+                         + "Email               : " + getEmail() + "\n"
+                         + "Legajo              : " + getLegajo() + "\n"
+                         + "Num.Licencia        : " + getNumeroLicencia() + "\n"
+                         + "Especialidad        : " + getEspecialidad() + " P/C"  + "\n"
+                         + "FechaContratacion   : " + getFechaContratacion() + "\n"
+                         + "Antiguedad          : " + antiguedad() + " anos" + "\n"
+                         + "Salario base        : " + Formato.mostrarUnidades(getSalarioBase()) + "\n"
+                         + "Cirugias Realizadas : " + getCirugiasRealizadas() + "\n"
+                         + "Disponibilidad Em.  : " + (isDisponibleEmergencias() ? "Disponible": "No disponible");
+    }
 }

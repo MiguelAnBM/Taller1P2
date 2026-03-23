@@ -23,7 +23,7 @@ public class Especialidad {
     public String getCodigo(){ return codigo; }
     public String getNombre(){ return nombre; }
     public String getDescripcion(){ return descripcion; }
-    public double getcostoConsulta(){ return costoConsulta; }
+    public double getCostoConsulta(){ return costoConsulta; }
    
     // — Setters con validación —
     public void setCodigo(String codigo){
@@ -59,7 +59,7 @@ public class Especialidad {
     //toString() para mostrar más bonito el objeto
     @Override
     public String toString() {
-        return "[" + codigo + "] " + nombre + " - Costo: $" + Formato.mostrarUnidades(costoConsulta);
+        return "[" + codigo + "] " + nombre + " - Costo: " + Formato.mostrarUnidades(costoConsulta);
     }
     
 }

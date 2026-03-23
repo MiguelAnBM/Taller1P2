@@ -42,7 +42,7 @@ public abstract class Empleado extends Persona {
         if (fecha.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("La fecha de contratacion no puede ser futura: " + fecha);
         if (getFechaNacimiento() != null && fecha.isBefore(getFechaNacimiento().plusYears(18)))
-            throw new IllegalArgumentException("El empleado debe tener minimo 18 años al contratarse.");
+            throw new IllegalArgumentException("El empleado debe tener minimo 18 anos al contratarse.");
         this.fechaContratacion = fecha;
     }
 
@@ -70,4 +70,10 @@ public abstract class Empleado extends Persona {
     
     // — Métodos abstractos propios —
     public abstract double calcularSalario();
+    
+    // — Otros Métodos —
+    @Override
+    public String toString(){
+        return obtenerTipo() + " | " + "(ID: " + getId() + ")";
+    }
 }
