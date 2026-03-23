@@ -32,7 +32,7 @@ public class Enfermero extends Empleado {
     public String getAreaAsignada(){ return areaAsignada; }
     public List<Paciente> getPacientesACargo(){ return Collections.unmodifiableList(pacientesACargo); } // Copia defensiva más segura
     
-    // — Setters —
+    // — Setters con validación —
     public void setTurno(Turno turno){
         if (turno == null)
             throw new IllegalArgumentException("El turno no puede ser nulo. Use el enum Turno.");
@@ -41,7 +41,7 @@ public class Enfermero extends Empleado {
     
     public void setAreaAsignada(String areaAsignada){
         if (areaAsignada == null || areaAsignada.isBlank())
-            throw new IllegalArgumentException("El área asignada no puede estar vacía.");
+            throw new IllegalArgumentException("El area asignada no puede estar vacia.");
         this.areaAsignada = areaAsignada.trim();
     }
     

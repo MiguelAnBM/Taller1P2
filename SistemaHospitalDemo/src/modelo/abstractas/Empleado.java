@@ -2,6 +2,7 @@ package modelo.abstractas;
 
 import java.time.LocalDate;
 import java.time.Period; // Para retornar años más fácilmente
+import servicios.Formato;
 
 public abstract class Empleado extends Persona {
 
@@ -47,7 +48,7 @@ public abstract class Empleado extends Persona {
 
     public void setSalarioBase(double salarioBase) {
         if (salarioBase <= 0)
-            throw new IllegalArgumentException("El salario base debe ser > 0. Recibido: " + salarioBase);
+            throw new IllegalArgumentException("El salario base debe ser > 0. Recibido: " + Formato.mostrarUnidades(salarioBase));
         this.salarioBase = salarioBase;
     }
 

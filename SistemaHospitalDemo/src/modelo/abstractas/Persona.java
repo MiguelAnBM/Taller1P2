@@ -1,6 +1,7 @@
 package modelo.abstractas;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public abstract class Persona {
 
@@ -11,7 +12,7 @@ public abstract class Persona {
     private String email;
 
     // Constructor base
-    // Lo escribí como setters para validar automáticamente al pasar los argumentos
+    // Usé setters para validar automáticamente al pasar los argumentos
     public Persona(String id, String nombre, String apellido,
             LocalDate fechaNacimiento, String email) {
 
@@ -27,7 +28,7 @@ public abstract class Persona {
     public String getId(){ return id; }
     public String getNombre() { return nombre; }
     public String getApellido() { return apellido; }
-    public String getNombreCompleto() {return nombre + " " + apellido;} // --> Para facilidad futura
+    public String getNombreCompleto() { return nombre + " " + apellido; } // --> Para facilidad futura
     public LocalDate getFechaNacimiento() { return fechaNacimiento; }
     public String getEmail() { return email; }
     
@@ -70,8 +71,10 @@ public abstract class Persona {
         this.email = email.trim().toLowerCase();
     }
 
+    // ── Otros Métodos — 
+    public int calcularEdad(){ return Period.between(getFechaNacimiento(), LocalDate.now()).getYears(); };
+    
     // ── Métodos abstractos — 
-    public abstract int calcularEdad();
     public abstract String obtenerTipo(); 
     
     

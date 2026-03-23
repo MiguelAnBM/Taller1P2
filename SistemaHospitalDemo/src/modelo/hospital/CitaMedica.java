@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import modelo.enums.EstadoCita;
 import modelo.personas.Medico;
 import modelo.personas.Paciente;
-
+import servicios.Formato;
 
 public class CitaMedica {
     
@@ -44,11 +44,11 @@ public class CitaMedica {
     public double getCosto() { return costo; }
     public Diagnostico getDiagnostico() { return diagnostico; }
     
-     // — Setters —
+     // — Setters con validación —
     
     public void setId(String id){
         if (id == null || id.isBlank()){
-            throw new IllegalArgumentException("El ID de cita no puede estar vacío.");
+            throw new IllegalArgumentException("El ID de cita no puede estar vacio.");
         }
         this.id = id.trim();
     }
@@ -62,7 +62,7 @@ public class CitaMedica {
     
     public void setMedico(Medico medico){
         if (medico == null){
-            throw new IllegalArgumentException("El médico no puede ser nulo.");
+            throw new IllegalArgumentException("El medico no puede ser nulo.");
         }
         this.medico = medico;
     }
@@ -76,7 +76,7 @@ public class CitaMedica {
     
     public void setMotivo(String motivo){
         if (motivo == null || motivo.isBlank()){
-            throw new IllegalArgumentException("El motivo no puede estar vacío.");
+            throw new IllegalArgumentException("El motivo no puede estar vacio.");
         }
         this.motivo = motivo.trim();
     }
@@ -100,13 +100,13 @@ public class CitaMedica {
             return;
         }
         if (diagnostico == null){
-            throw new IllegalArgumentException("Se requiere un diagnóstico para completar la cita.");
+            throw new IllegalArgumentException("Se requiere un diagnostico para completar la cita.");
         }
         this.diagnostico = diagnostico;
         this.estado = EstadoCita.COMPLETADA;
         calcularCosto();
         medico.atenderPaciente(paciente);
-        System.out.println("Cita [" + id + "] completada. Costo: $" + costo);
+        System.out.println("Cita [" + id + "] completada. Costo: $" + Formato.mostrarUnidades(costo));
     }
     
     public void cancelar() {
@@ -116,14 +116,14 @@ public class CitaMedica {
             return;
         }
         estado = EstadoCita.CANCELADA;
-        System.out.println("Cita [" + id + "] cancelada. → " + estado.getDescripcion());
+        System.out.println("Cita [" + id + "] cancelada. --> " + estado.getDescripcion());
     }
     
     // toString() para presentar más bonito los datos :b
     @Override
     public String toString() {
         return "Cita[" + id + "] " + paciente.getNombreCompleto()
-                + " → Dr. " + medico.getNombreCompleto()
+                + " --> Dr. " + medico.getNombreCompleto()
                 + " | " + fechaHora + " | " + estado.getEstado();
     }
 }

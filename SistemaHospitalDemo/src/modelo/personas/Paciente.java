@@ -2,7 +2,6 @@
 package modelo.personas;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections; // Para copias defensivas
@@ -22,7 +21,7 @@ public class Paciente extends Persona {
                     String historiaClinidaId, String grupoSanguineo) {
         
         super(id, nombre, apellido, fechaNacimiento, email);
-        setHistoriaClinicaId(historiaClinicaId);
+        setHistoriaClinicaId(historiaClinidaId);
         setGrupoSanguineo(grupoSanguineo);
         this.alergias = new ArrayList<>();
         this.citas = new ArrayList<>();
@@ -45,10 +44,10 @@ public class Paciente extends Persona {
     
     
     // — Setters con validación —
-    public void setHistoriaClinicaId(String id) {
-        if (id == null || id.isBlank())
+    public void setHistoriaClinicaId(String historiaClinidaId) {
+        if (historiaClinidaId == null || historiaClinidaId.isBlank())
             throw new IllegalArgumentException("El ID de historia clinica no puede estar vacio.");
-        this.historiaClinicaId = id.trim();
+        this.historiaClinicaId = historiaClinidaId.trim();
     }
 
     public void setGrupoSanguineo(String grupoSanguineo) {
@@ -90,14 +89,12 @@ public class Paciente extends Persona {
         sb.append("Edad     : ").append(calcularEdad()).append(" años\n");
         sb.append("Alergias : ").append(alergias.isEmpty() ? "Ninguna" : String.join(", ", alergias)).append("\n");
         sb.append("Citas    : ").append(citas.size()).append("\n");
+        // c representa cada cita
         citas.forEach(c -> sb.append("  --> ").append(c).append("\n"));
         return sb.toString();
     }
     
     // — Métodos abstractos Heredados —
-    @Override
-    public int calcularEdad() { return Period.between(getFechaNacimiento(), LocalDate.now()).getYears(); }
-
     @Override
     public String obtenerTipo() { return "Paciente"; } // --> Polimorfismo :D
     

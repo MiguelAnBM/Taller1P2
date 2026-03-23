@@ -35,16 +35,16 @@ public class Hospital {
     public List<Paciente> getPacientes() { return Collections.unmodifiableList(pacientes); } // Copia defensiva más segura
     public List<CitaMedica> getCitas() { return Collections.unmodifiableList(citas); } // Copia defensiva más segura
     
-    // — Setters —
+    // — Setters con validación —
     public void setNombre(String nombre){
         if (nombre == null || nombre.isBlank())
-            throw new IllegalArgumentException("El nombre del hospital no puede estar vacío.");
+            throw new IllegalArgumentException("El nombre del hospital no puede estar vacio.");
         this.nombre = nombre.trim();
     }
     
     public void setDireccion(String direccion){
         if (direccion == null || direccion.isBlank())
-            throw new IllegalArgumentException("La dirección no puede estar vacía.");
+            throw new IllegalArgumentException("La direccion no puede estar vacia.");
         this.direccion = direccion.trim();
     }
     
@@ -60,6 +60,25 @@ public class Hospital {
         System.out.println("Contratado: " + empleado.getNombreCompleto()
                 + " (" + empleado.obtenerTipo() + ")");
     }
+    
+    /*
+        AGREGACIÓN: recibe un paciente ya existente y lo registra en el hospital.
+    */
+    public void registrarPaciente(Paciente paciente) {
+        if (paciente == null)
+            throw new IllegalArgumentException("El paciente no puede ser nulo.");
+        pacientes.add(paciente);
+        System.out.println("✔  Paciente registrado: " + paciente.getNombreCompleto());
+    }
+    
+    // Método para buscar un paciente por su id
+    public Paciente buscarPaciente(String id) {
+        for (Paciente p : pacientes) {
+            if (p.getId().equalsIgnoreCase(id)) { return p; }
+        }
+        return null;
+    }
+
     
     /*
         COMPOSICIÓN: el Hospital crea la CitaMedica.

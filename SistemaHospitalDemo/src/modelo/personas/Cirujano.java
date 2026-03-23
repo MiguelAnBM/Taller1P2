@@ -27,7 +27,7 @@ public class Cirujano extends Medico {
     public int getCirugiasRealizadas() { return cirugiasRealizadas; }
     public boolean isDisponibleEmergencias() { return disponibleEmergencias; }
     
-    // — Setters —
+    // — Setters con validación —
     public void setDisponibleEmergencias(boolean disponibleEmergencias) {
         this.disponibleEmergencias = disponibleEmergencias;
     }
@@ -37,11 +37,11 @@ public class Cirujano extends Medico {
         if (paciente == null)
             throw new IllegalArgumentException("El paciente no puede ser nulo.");
         if (tipoCirugia == null || tipoCirugia.isBlank())
-            throw new IllegalArgumentException("El tipo de cirugía no puede estar vacío.");
+            throw new IllegalArgumentException("El tipo de cirugia no puede estar vacio.");
         cirugiasRealizadas++;
         System.out.println("Dr. " + getNombreCompleto()
-                + " realizó [" + tipoCirugia + "] a " + paciente.getNombreCompleto()
-                + ". Total cirugías: " + cirugiasRealizadas);
+                + " realizo [" + tipoCirugia + "] a " + paciente.getNombreCompleto()
+                + ". Total cirugias: " + cirugiasRealizadas);
     }
     
     // Le puse un bono de 200.000 por cada cirugía realizada

@@ -2,8 +2,8 @@
 package modelo.enums;
 
 public enum EstadoCita {
-    PENDIENTE  ("Pendiente",   "La cita aún no ha sido atendida"),
-    COMPLETADA ("Completada",  "La cita fue atendida con diagnóstico"),
+    PENDIENTE  ("Pendiente",   "La cita aun no ha sido atendida"),
+    COMPLETADA ("Completada",  "La cita fue atendida con diagnostico"),
     CANCELADA  ("Cancelada",   "La cita fue cancelada antes de realizarse");
 
     private final String estado;
