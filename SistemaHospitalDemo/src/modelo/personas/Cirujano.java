@@ -2,6 +2,8 @@
 package modelo.personas;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import modelo.hospital.Especialidad;
 import servicios.Formato;
@@ -41,8 +43,7 @@ public class Cirujano extends Medico {
             throw new IllegalArgumentException("El tipo de cirugia no puede estar vacio.");
         cirugiasRealizadas++;
         System.out.println("Dr. " + getNombreCompleto()
-                + " realizo [" + tipoCirugia + "] a " + paciente.getNombreCompleto()
-                + ". Total cirugias: " + cirugiasRealizadas);
+                + " realiza cirugia de [" + tipoCirugia + "] a " + paciente.getNombreCompleto());
     }
     
     // Le puse un bono de 200.000 por cada cirugía realizada

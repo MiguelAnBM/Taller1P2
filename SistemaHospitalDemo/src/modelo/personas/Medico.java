@@ -60,8 +60,7 @@ public class Medico extends Empleado {
             pacientesAsignados.add(paciente);
             citasAtendidas++;
             System.out.println("Dr. " + getNombreCompleto()
-                + " atendio a " + paciente.getNombreCompleto()
-                + ". Total de citas: " + citasAtendidas);
+                + " atendio a " + paciente.getNombreCompleto());
         }
     }
 
@@ -73,7 +72,7 @@ public class Medico extends Empleado {
     */
     @Override
     public double calcularSalario() {
-        double bonusAntiguedad = getSalarioBase() * 0.05 * antiguedad();
+        double bonusAntiguedad = getSalarioBase() + (0.05 * antiguedad());
         double bonusCitas = getSalarioBase() * 0.01 * (citasAtendidas / 10);
         return getSalarioBase() + bonusAntiguedad + bonusCitas;
     }

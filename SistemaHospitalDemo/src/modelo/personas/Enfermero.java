@@ -35,15 +35,24 @@ public class Enfermero extends Empleado {
     
     // — Setters con validación —
     public void setTurno(Turno turno){
-        if (turno == null)
+        if (turno == null){
             throw new IllegalArgumentException("El turno no puede ser nulo. Use el enum Turno.");
+        }
         this.turno = turno;
     }
     
     public void setAreaAsignada(String areaAsignada){
-        if (areaAsignada == null || areaAsignada.isBlank())
+        if (areaAsignada == null || areaAsignada.isBlank()){
             throw new IllegalArgumentException("El area asignada no puede estar vacia.");
+        }
         this.areaAsignada = areaAsignada.trim();
+    }
+    
+    public void setPacienteACargo(Paciente paciente){
+        if (paciente == null){
+            throw new IllegalArgumentException("El paciente no puede estar vacia.");
+        }
+        this.pacientesACargo.add(paciente);
     }
     
     // — Otros métodos —
@@ -54,6 +63,7 @@ public class Enfermero extends Empleado {
         System.out.println("Enf. " + getNombreCompleto()
                 + " asiste al Dr. " + cirujano.getNombreCompleto()
                 + " en la cirugia de " + paciente.getNombreCompleto());
+        pacientesACargo.add(paciente);
     }
     
     // — Métodos abstractos Heredados —

@@ -68,13 +68,29 @@ public class Hospital {
         if (paciente == null)
             throw new IllegalArgumentException("El paciente no puede ser nulo.");
         pacientes.add(paciente);
-        System.out.println("✔  Paciente registrado: " + paciente.getNombreCompleto());
+        System.out.println("\nPaciente " + paciente.getNombreCompleto() + "registrado correctamente.");
+    }
+    
+    // Busca, valida y retorna una cita
+    public CitaMedica buscarCita(String id) {
+        for (CitaMedica cita : citas) {
+            if (cita.getId().equalsIgnoreCase(id)) { return cita; }
+        }
+        return null;
     }
     
     // Método para buscar un paciente por su id
     public Paciente buscarPaciente(String id) {
         for (Paciente p : pacientes) {
             if (p.getId().equalsIgnoreCase(id)) { return p; }
+        }
+        return null;
+    }
+    
+    // Busca, valida y retorna un Médico
+    public  Medico buscarMedico(String id) {
+        for (Empleado empleado : empleados) {
+            if (empleado instanceof Medico medico && medico.getId().equalsIgnoreCase(id)) { return medico; }
         }
         return null;
     }

@@ -1,7 +1,6 @@
 package modelo.abstractas;
 
 import java.time.LocalDate;
-import java.time.Period;
 
 public abstract class Persona {
 
@@ -72,7 +71,7 @@ public abstract class Persona {
     }
 
     // ── Otros Métodos — 
-    public int calcularEdad(){ return Period.between(getFechaNacimiento(), LocalDate.now()).getYears(); };
+    public int calcularEdad() { return LocalDate.now().getYear() - getFechaNacimiento().getYear(); };
     
     // ── Métodos abstractos — 
     public abstract String obtenerTipo(); 

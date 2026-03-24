@@ -85,6 +85,7 @@ public class LogicaYMenus {
                             3. Consultar historial
                             4. Buscar Paciente por ID   
                             5. Listar pacientes
+                            6. Realizar cirugia
                             0. Volver al menu principal""");
             imprimirSeparador();
             opcion = verificarEntero(" Seleccione una opcion");
@@ -97,6 +98,7 @@ public class LogicaYMenus {
                     case 3 -> consultarHistorial();
                     case 4 -> buscarPacientePorId();
                     case 5 -> listarPacientes();
+                    case 6 -> realizarCirugia();
                     case 0 -> {
                         System.out.println(" Volviendo al menu principal...\n");
                         return;
@@ -129,15 +131,33 @@ public class LogicaYMenus {
             
             String nombre = verificarTexto("Ingrese el Nombre");
             String apellido = verificarTexto("Ingrese el Apellido");
-            LocalDate fecha = verificarFecha("Ingrese la Fecha nac. (YYYY-MM-DD)");
-            String email = verificarTexto("Ingrese el Email");
+            
+            LocalDate fechaNac;
+            while (true) {                
+                fechaNac = verificarFecha("Ingrese la Fecha nac. (YYYY-MM-DD)");
+                if (fechaNac.isAfter(LocalDate.now())) {
+                    imprimirError("La fecha de nacimiento no puede ser en el futuro. Intente de nuevo.");
+                    continue;
+                }
+                break;
+            }
+            
+            String email;
+            while (true) {                             
+                email = verificarTexto("Ingrese el Email");
+                if (!email.contains("a")) {
+                    imprimirError("Correo invalido. Intente de nuevo.");
+                    continue;
+                }
+                break;
+            }
+            
             String historiaClinicaId = verificarTexto("Ingrese la Id de la HistoriaClinica");
             String grupo = verificarTexto("Ingrese el Grupo sanguineo");
 
-            Paciente paciente = new Paciente(id, nombre, apellido, fecha, email, historiaClinicaId, grupo);
+            Paciente paciente = new Paciente(id, nombre, apellido, fechaNac, email, historiaClinicaId, grupo);
 
             hospital.registrarPaciente(paciente);
-            System.out.println("\nPaciente " + paciente.getNombreCompleto() + " registrado correctamente.");
             
         } catch (IllegalArgumentException error) {
             imprimirError(error.getMessage());
@@ -154,9 +174,8 @@ public class LogicaYMenus {
                                    REGISTRAR ALERGIA
                            ==================================""");   
         
-        String pacienteABuscar = verificarTexto("Ingrese el numero Id del paciente");
-        Paciente pacienteLocalizado = hospital.buscarPaciente(pacienteABuscar);
-        if (pacienteLocalizado == null) { 
+        Paciente pacienteLocalizado = hospital.buscarPaciente(verificarTexto("Ingrese el numero Id del paciente"));
+        if (pacienteLocalizado == null) {
             throw new IllegalArgumentException("Paciente no registrado en el sistema."); 
         }
      
@@ -178,9 +197,8 @@ public class LogicaYMenus {
                               CONSULTAR HISTORIAL CLINICO 
                            ==================================""");   
         
-        String pacienteABuscar = verificarTexto("Ingrese el numero Id del paciente");
-        Paciente pacienteLocalizado = hospital.buscarPaciente(pacienteABuscar);
-        if (pacienteLocalizado == null) { 
+        Paciente pacienteLocalizado = hospital.buscarPaciente(verificarTexto("Ingrese el numero Id del paciente"));
+        if (pacienteLocalizado == null) {
             throw new IllegalArgumentException("Paciente no registrado en el sistema."); 
         }
         
@@ -197,8 +215,8 @@ public class LogicaYMenus {
                            ==================================
                                  BUSCAR PACIENTE POR ID
                            ==================================""");
-        String pacienteABuscar = verificarTexto("Ingrese el numero Id del paciente");
-        Paciente pacienteLocalizado = hospital.buscarPaciente(pacienteABuscar);
+        
+        Paciente pacienteLocalizado = hospital.buscarPaciente(verificarTexto("Ingrese el numero Id del paciente"));
         if (pacienteLocalizado == null) {
             throw new IllegalArgumentException("Paciente no registrado en el sistema."); 
         }
@@ -221,6 +239,43 @@ public class LogicaYMenus {
             System.out.println(paciente);
             imprimirSeparador();
         }
+    }
+    
+    private static void realizarCirugia() {
+        if (hospital.getPacientes().isEmpty() || hospital.getEmpleados().isEmpty()) {
+            throw new IllegalArgumentException("No existen pacientes o empleados registrados.");
+        }
+        
+        
+        System.out.println("""
+                           ==================================
+                                    REALIZAR CIRUGIA
+                           ==================================""");
+        
+        LocalDateTime fechaHora = verificarFechaHora("Ingrese Fecha/hora de la cirugia");
+        if (fechaHora.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("No puedes agendar una cita en el pasado");
+        }
+        
+        imprimirSeparador();
+        Cirujano cirujano = seleccionarCirujano();
+        if (cirujano == null) { return; }
+        imprimirSeparador();
+        
+        Paciente paciente = hospital.buscarPaciente(verificarTexto("Ingrese el numero ID del paciente"));
+        if (paciente == null) {
+            throw new IllegalArgumentException("Paciente no encontrado"); 
+        }
+        
+        String tipoCirugia = verificarTexto("Ingrese el tipo de cirugia");
+        
+        imprimirSeparador();
+        Enfermero enfermeroAsignado = seleccionarEnfermero();
+        if (enfermeroAsignado == null) { return; }
+        
+        enfermeroAsignado.asistirCirugia(cirujano, paciente);
+        cirujano.realizarCirugia(paciente, tipoCirugia);
+        
     }
     
     // ══════════════════════════════════════════════
@@ -251,7 +306,7 @@ public class LogicaYMenus {
                     case 4 -> listarEmpleados();
                     case 5 -> desactivarEmpleado();
                     case 0 -> {
-                            System.out.println(" Volviendo al menu principal...\n");
+                            System.out.println("Volviendo al menu principal...\n");
                             return;
                     }
                     default -> imprimirError("Opcion invalida. Intente de nuevo.");
@@ -378,7 +433,7 @@ public class LogicaYMenus {
         imprimirSeparador();
 
         while (true) {
-            int seleccion = verificarEntero(" Seleccione el numero del empleado");
+            int seleccion = verificarEntero("Seleccione el numero del empleado");
             if (seleccion >= 1 && seleccion <= lista.size()) {
                 Empleado empleado = lista.get(seleccion - 1);
                 String accion = empleado.isActivo() ? "desactivar" : "activar";
@@ -393,11 +448,11 @@ public class LogicaYMenus {
                     System.out.println(empleado.getNombreCompleto()
                             + " " + resultado + " correctamente.");
                 } else {
-                    System.out.println(" Operacion cancelada.");
+                    imprimirError("Operacion cancelada.");
                 }
                 return;
             } else {
-                imprimirError("Selección invalida. Ingrese un numero entre 1 y " + lista.size());
+                imprimirError("Seleccion invalida. Ingrese un numero entre 1 y " + lista.size());
             }
         }
     }
@@ -424,16 +479,16 @@ public class LogicaYMenus {
             
             try {
                 switch (opcion) {
-                case 1 -> agendarCita();
-                case 2 -> completarCita();
-                case 3 -> cancelarCita();
-                case 4 -> listarCitasPorPaciente();
-                case 5 -> listarCitasPorMedico();
-                case 0 -> {
-                    System.out.println(" Volviendo al menu principal...\n");
-                    return;
-                }
-                default -> imprimirError("Opcion invalida. Intente de nuevo.");
+                    case 1 -> agendarCita();
+                    case 2 -> completarCita();
+                    case 3 -> cancelarCita();
+                    case 4 -> listarCitasPorPaciente();
+                    case 5 -> listarCitasPorMedico();
+                    case 0 -> {
+                            System.out.println(" Volviendo al menu principal...\n");
+                            return;
+                        }
+                    default -> imprimirError("Opcion invalida. Intente de nuevo.");
                 }
             } catch (IllegalArgumentException error) {
                 imprimirError(error.getMessage());
@@ -444,6 +499,7 @@ public class LogicaYMenus {
     private static void agendarCita(){
         
         // Verifica específicamente si hay médicos activos
+        // e es empleado
         boolean hayMedicos = hospital.getEmpleados().stream()
                 .anyMatch(e -> e instanceof Medico && e.isActivo());
 
@@ -459,8 +515,10 @@ public class LogicaYMenus {
                                      AGENDAR CITA
                            ==================================""");
         
-        Paciente paciente = buscarPaciente();
-        if (paciente == null) { return; }
+        Paciente paciente = hospital.buscarPaciente(verificarTexto("Ingrese el ID del paciente"));
+        if (paciente == null) { 
+            throw new IllegalArgumentException("Paciente no encontrado"); 
+        }
 
         LocalDateTime fechaHora = verificarFechaHora("Ingrese Fecha/hora");
         if (fechaHora.isBefore(LocalDateTime.now())) {
@@ -468,7 +526,9 @@ public class LogicaYMenus {
         }
 
         Medico medico = seleccionarMedico(fechaHora);
-        if (medico == null){ return; }
+        if (medico == null){ 
+            throw new IllegalArgumentException("No hay medicos disponibles");
+        }
         
         String idCita;
         while (true) {
@@ -495,12 +555,13 @@ public class LogicaYMenus {
                                     COMPLETAR CITA
                            ==================================""");
         try {
-            CitaMedica cita = buscarCita();
-            if (cita == null) return;
+            CitaMedica cita = hospital.buscarCita(verificarTexto("Ingrese el ID de la cita"));
+            if (cita == null) {
+                throw new IllegalArgumentException("Cita no registrada en el sistema."); 
+            }
 
             if (cita.getEstado() != EstadoCita.PENDIENTE) {
-                imprimirError("La cita no esta pendiente. Estado actual: " + cita.getEstado().getEstado());
-                return;
+                throw new IllegalArgumentException("La cita no esta pendiente. Estado actual: " + cita.getEstado().getEstado()); 
             }
 
             String diagId = verificarTexto("Ingrese el ID del diagnostico");
@@ -525,8 +586,10 @@ public class LogicaYMenus {
                                     CANCELAR CITA
                            ==================================""");
         
-        CitaMedica cita = buscarCita();
-        if (cita == null) return;
+        CitaMedica cita = hospital.buscarCita(verificarTexto("Ingrese el ID de cita"));
+        if (cita == null) {
+            throw new IllegalArgumentException("Cita no encontrada"); 
+        }
 
         if (cita.getEstado() != EstadoCita.PENDIENTE) {
             imprimirError("La cita no esta pendiente. Estado actual: "
@@ -546,12 +609,9 @@ public class LogicaYMenus {
                                   CITAS POR PACIENTE
                            ==================================""");
 
-        String id = verificarTexto(" Ingrese el ID del paciente");
-        Paciente paciente = hospital.buscarPaciente(id);
-
+        Paciente paciente = hospital.buscarPaciente(verificarTexto("Ingrese el ID del paciente"));
         if (paciente == null) {
-            imprimirError("Paciente no encontrado con ID: " + id);
-            return;
+            throw new IllegalArgumentException("Paciente no encontrado"); 
         }
 
         // Filtrar citas del paciente
@@ -561,24 +621,16 @@ public class LogicaYMenus {
                 citasPaciente.add(cita);
             }
         }
+        
+        if (citasPaciente.isEmpty()) {
+            throw new IllegalArgumentException("El paciente no tiene citas registradas"); 
+        }
 
         System.out.println(" Citas de: " + paciente.getNombreCompleto());
         imprimirSeparador();
 
-        if (citasPaciente.isEmpty()) {
-            imprimirError("El paciente no tiene citas registradas.");
-            return;
-        }
-
         for (CitaMedica cita : citasPaciente) {
-            System.out.println(" ID       : " + cita.getId());
-            System.out.println(" Médico   : " + cita.getMedico().getNombreCompleto());
-            System.out.println(" Fecha    : " + cita.getFechaHora());
-            System.out.println(" Motivo   : " + cita.getMotivo());
-            System.out.println(" Estado   : " + cita.getEstado().getEstado());
-            System.out.println(" Costo    : " + (cita.getEstado() == EstadoCita.COMPLETADA
-                    ? Formato.mostrarUnidades(cita.getCosto()) : "---"));
-            imprimirSeparador();
+            System.out.println(cita);
         }
     }
     
@@ -592,8 +644,10 @@ public class LogicaYMenus {
                                    CITAS POR MEDICO
                            ==================================""");
         
-        Medico medico = buscarMedico();
-        if (medico == null) { return; }
+        Medico medico = hospital.buscarMedico(verificarTexto("Ingrese el id del medico"));
+        if (medico == null) { 
+            throw new IllegalArgumentException("Medico no encontrado");
+        }
 
         // Filtrar citas del médico
         List<CitaMedica> citasMedico = new ArrayList<>();
@@ -602,24 +656,16 @@ public class LogicaYMenus {
                 citasMedico.add(cita);
             }
         }
-
+        
+        if (citasMedico.isEmpty()) {
+            throw new IllegalArgumentException("El medico no tiene citas registradas.");
+        }
+        
         System.out.println(" Citas de: Dr. " + medico.getNombreCompleto());
         imprimirSeparador();
 
-        if (citasMedico.isEmpty()) {
-            imprimirError("El medico no tiene citas registradas.");
-            return;
-        }
-
         for (CitaMedica cita : citasMedico) {
-            System.out.println(" ID       : " + cita.getId());
-            System.out.println(" Paciente : " + cita.getPaciente().getNombreCompleto());
-            System.out.println(" Fecha    : " + cita.getFechaHora());
-            System.out.println(" Motivo   : " + cita.getMotivo());
-            System.out.println(" Estado   : " + cita.getEstado().getEstado());
-            System.out.println(" Costo    : " + (cita.getEstado() == EstadoCita.COMPLETADA
-                    ? Formato.mostrarUnidades(cita.getCosto()) : "---"));
-            imprimirSeparador();
+            System.out.println(cita);
         }
     }
     
@@ -636,6 +682,7 @@ public class LogicaYMenus {
                             1. Nomina total
                             2. Salarios por empleado
                             0. Volver al menu principal""");
+            
             imprimirSeparador();
             opcion = verificarEntero(" Seleccione una opcion");
             imprimirSeparador();
@@ -665,7 +712,8 @@ public class LogicaYMenus {
                                       NOMINA TOTAL
                            ==================================""");
         
-        hospital.calcularNominaTotal();
+        double nominaTotal = hospital.calcularNominaTotal();
+        System.out.println(Formato.mostrarUnidades(nominaTotal));
         imprimirSeparador();
     }
     
@@ -681,7 +729,7 @@ public class LogicaYMenus {
         for (Empleado empleado : hospital.getEmpleados()) {
             System.out.println("  Nombre     : " + empleado.getNombreCompleto());
             System.out.println("  Tipo       : " + empleado.obtenerTipo());
-            System.out.println("  Antigüedad : " + empleado.antiguedad() + " anos");
+            System.out.println("  Antiguedad : " + empleado.antiguedad() + " anos");
             System.out.println("  Salario    : " + Formato.mostrarUnidades(empleado.calcularSalario()));
             imprimirSeparador();
         }
@@ -738,7 +786,7 @@ public class LogicaYMenus {
     
     private static LocalDate verificarFecha(String mensaje) {
         while (true) {
-            System.out.print(" " + mensaje + ": ");
+            System.out.print(" " + mensaje + "(YYYY-MM-DD): ");
             String valor = sc.nextLine().trim();
             if (valor.isBlank()) {
                 imprimirError("El campo no puede estar vacio. Intente de nuevo.");
@@ -788,16 +836,6 @@ public class LogicaYMenus {
         return false;
     }
     
-    // Busca, valida y retorna un Paciente
-    private static Paciente buscarPaciente() {
-        String id = verificarTexto(" Ingrese el ID del paciente");
-        for (Paciente paciente : hospital.getPacientes()) {
-            if (paciente.getId().equalsIgnoreCase(id)) { return paciente; }
-        }
-        imprimirError("Paciente no encontrado con ID: " + id);
-        return null;
-    }
-    
     // Valida la disponibilidad de un médico para agendar una cita, retorna true para disponibilidad
     private static boolean medicoDisponible(Medico medico, LocalDateTime fechaHora) {
         for (CitaMedica citas : hospital.getCitas()) {
@@ -810,7 +848,104 @@ public class LogicaYMenus {
         return true;
     }
     
-    // Imprime a los médicos que se encuentran disponibles y los que no
+    
+    // Permite seleccionar de entre una lista de cirujanos disponibles
+    private static Cirujano seleccionarCirujano() {
+        
+        List<Cirujano> disponibles = new ArrayList<>();
+        List<Cirujano> noDisponibles = new ArrayList<>();
+
+        for (Empleado empleado : hospital.getEmpleados()) {
+            if (empleado instanceof Cirujano cirujano && cirujano.isActivo()) {
+                disponibles.add(cirujano);
+            }
+        }
+
+        if (disponibles.isEmpty()) {
+            imprimirError("No hay cirujanos disponibles.");
+            return null;
+        }
+        
+        // Cirujanos disponibles — seleccionables
+        System.out.println(" Cirujanos disponibles:");
+        for (int i = 0; i < disponibles.size(); i++) {
+            Cirujano cirujano = disponibles.get(i);
+            System.out.println(" " + (i + 1) + ". " + cirujano.getNombreCompleto()
+                    + " -- " + cirujano.getEspecialidad().getNombre());
+        }
+
+        // Médicos ocupados — solo informativo, no seleccionables
+        if (!noDisponibles.isEmpty()) {
+            imprimirSeparador();
+            System.out.println(" Cirujanos ocupados:");
+            for (Cirujano cirujano : noDisponibles) {
+                System.out.println(" - " + cirujano.getNombreCompleto()
+                        + " -- " + cirujano.getEspecialidad().getNombre());
+            }
+        }
+
+        System.out.println("  0. Cancelar"); // --> Para salir de la selección 
+        imprimirSeparador();
+
+        // Selección — solo se aceptan índices de la lista de disponibles
+        while (true) {
+            int seleccion = verificarEntero("Seleccione el numero del cirujano");
+            if (seleccion == 0) return null; // --> Escape
+            if (seleccion >= 1 && seleccion <= disponibles.size()) {
+                return disponibles.get(seleccion - 1);
+            }
+            imprimirError("Seleccion invalida. Ingrese un numero entre 1 y " + disponibles.size());
+        }
+    }
+    
+    // Permite seleccionar de entre una lista de enfemeros disponibles
+    private static Enfermero seleccionarEnfermero() {
+        
+        List<Enfermero> disponibles = new ArrayList<>();
+        List<Enfermero> noDisponibles = new ArrayList<>();
+
+        for (Empleado empleado : hospital.getEmpleados()) {
+            if (empleado instanceof Enfermero enfermero && enfermero.isActivo()) {
+                    disponibles.add(enfermero);
+            }
+        }
+
+        if (disponibles.isEmpty()) {
+            imprimirError("No hay enfermeros disponibles.");
+            return null;
+        }
+        
+        // Cirujanos disponibles — seleccionables
+        System.out.println(" Enfermeros disponibles:");
+        for (int i = 0; i < disponibles.size(); i++) {
+            Enfermero enfermero = disponibles.get(i);
+            System.out.println(" " + (i + 1) + ". " + enfermero.getNombreCompleto());
+        }
+
+        // Médicos ocupados — solo informativo, no seleccionables
+        if (!noDisponibles.isEmpty()) {
+            imprimirSeparador();
+            System.out.println(" Enfermeros ocupados en ese horario:");
+            for (Enfermero enfermero : noDisponibles) {
+                System.out.println(" - " + enfermero.getNombreCompleto());
+            }
+        }
+
+        System.out.println("  0. Cancelar"); // --> Para salir de la selección 
+        imprimirSeparador();
+
+        // Selección — solo se aceptan índices de la lista de disponibles
+        while (true) {
+            int seleccion = verificarEntero("Seleccione el numero del enfermero");
+            if (seleccion == 0) return null; // --> Escape
+            if (seleccion >= 1 && seleccion <= disponibles.size()) {
+                return disponibles.get(seleccion - 1);
+            }
+            imprimirError("Seleccion invalida. Ingrese un numero entre 1 y " + disponibles.size());
+        }
+    }
+    
+    // Permite seleccionar de entre una lista de médicos disponibles
     private static Medico seleccionarMedico(LocalDateTime fechaHora) {
 
         List<Medico> disponibles = new ArrayList<>();
@@ -843,9 +978,9 @@ public class LogicaYMenus {
         if (!noDisponibles.isEmpty()) {
             imprimirSeparador();
             System.out.println(" Medicos ocupados en ese horario:");
-            for (Medico m : noDisponibles) {
-                System.out.println(" - " + m.getNombreCompleto()
-                        + " -- " + m.getEspecialidad().getNombre());
+            for (Medico medico : noDisponibles) {
+                System.out.println(" - " + medico.getNombreCompleto()
+                        + " -- " + medico.getEspecialidad().getNombre());
             }
         }
 
@@ -863,43 +998,54 @@ public class LogicaYMenus {
         }
     }
     
-    // Busca, valida y retorna un Médico
-    private static Medico buscarMedico() {
-        String id = verificarTexto(" Ingrese el id del medico");
-        for (Empleado empleado : hospital.getEmpleados()) {
-            if (empleado instanceof Medico medico && medico.getId().equalsIgnoreCase(id)) { return medico; }
-        }
-        imprimirError("Medico no encontrado con ID: " + id);
-        return null;
-    }
-    
-    
-    // Busca, valida y retorna una cita
-    private static CitaMedica buscarCita() {
-        String id = verificarTexto(" Ingrese el ID de la cita");
-        for (CitaMedica cita : hospital.getCitas()) {
-            if (cita.getId().equalsIgnoreCase(id)) { return cita; }
-        }
-        imprimirError("Cita no encontrada con ID: " + id);
-        return null;
-    }
-    
     // Retorno los datos de los empleados gracias al record DatosEmpleado
     private static DatosEmpleado leerDatosEmpleado() {
         String id;
-        boolean existe;
-        do {
+        while (true) {            
             id = verificarTexto("Ingrese el ID");
-            existe = existeIdPacienteOEmpleado(id);
-            if (existe) imprimirError("El ID ya existe. Ingrese uno diferente.");
-        } while (existe);
+            if (existeIdPacienteOEmpleado(id)) {
+                imprimirError("El ID ya esta registrado. Intente otro.");
+                continue;
+            }
+            break;
+        }
 
         String nombre = verificarTexto("Ingrese el Nombre");
         String apellido = verificarTexto("Ingrese el Apellido");
-        LocalDate fechaNac  = verificarFecha("Ingrese la Fecha nac. (YYYY-MM-DD)");
-        String email = verificarTexto("Ingrese el Email");
+        
+        LocalDate fechaNac;
+        while (true) {            
+            fechaNac = verificarFecha("Ingrese la Fecha de Nacimiento");
+            if (fechaNac.isAfter(LocalDate.now())) {
+                imprimirError("No puede ingresar una fecha futura. Intente de nuevo.");
+                continue;
+            }
+            break;
+        }
+        
+        String email;
+        while (true) {            
+            email = verificarTexto("Ingrese el Email");
+            if (!email.contains("@")) {
+                imprimirError("Correo invalido. Intente de nuevo.");
+                continue;
+            }
+            break;
+        }
+        
+        
         String legajo = verificarTexto("Ingrese el Legajo");
-        LocalDate fechaCont = verificarFecha("Ingrese la Fecha de contratacion (YYYY-MM-DD)");
+        
+        LocalDate fechaCont;
+        while (true) {            
+            fechaCont = verificarFecha("Ingrese la Fecha de contratacion");
+            if (fechaCont.isAfter(LocalDate.now())) {
+                imprimirError("No puede ingresar una fecha futura. Intente de nuevo.");
+                continue;
+            }
+            break;
+        }
+        
         double salario = verificarDouble("Ingrese el Salario base");
 
         return new DatosEmpleado(id, nombre, apellido, fechaNac, email, legajo, fechaCont, salario);

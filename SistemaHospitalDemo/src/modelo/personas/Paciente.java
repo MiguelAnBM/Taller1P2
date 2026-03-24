@@ -90,7 +90,7 @@ public class Paciente extends Persona {
         sb.append("Alergias : ").append(alergias.isEmpty() ? "Ninguna" : String.join(", ", alergias)).append("\n");
         sb.append("Citas    : ").append(citas.size()).append("\n");
         for (CitaMedica cita : citas) {
-            System.out.println("");
+            System.out.println("----------------------------------");
             System.out.println(cita);
         }
         

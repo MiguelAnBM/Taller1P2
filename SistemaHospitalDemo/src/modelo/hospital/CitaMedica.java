@@ -109,7 +109,7 @@ public class CitaMedica {
         this.estado = EstadoCita.COMPLETADA;
         calcularCosto();
         medico.atenderPaciente(paciente); // Asociación con Médico
-        System.out.println("Cita [" + id + "] completada. Costo: $" + Formato.mostrarUnidades(costo));
+        System.out.println("Cita [" + id + "] completada. Costo: " + Formato.mostrarUnidades(costo));
     }
     
     public void cancelar() {
@@ -126,10 +126,11 @@ public class CitaMedica {
     @Override
     public String toString() {
         return "Cita[" + id + "] "
-             + "Paciente     :" + paciente.getNombreCompleto() + "\n"
-             + "Doctor       :" + medico.getNombreCompleto() + "\n"
-             + "Fecha y Hora :" + fechaHora + "\n"
-             + "Estado       :" + estado.getEstado() + "\n"
-             + "Costo:       "  + ((estado == EstadoCita.COMPLETADA) ? costo : "Por definir");
+             + "Paciente     : " + paciente.getNombreCompleto() + "\n"
+             + "Doctor       : " + medico.getNombreCompleto() + "\n"
+             + "Fecha y Hora : " + fechaHora + "\n"
+             + "Estado       : " + estado.getEstado() + "\n"
+             + "Diagnostico  : " + ((diagnostico == null) ? "Por definir" : diagnostico.getDescripcion()) + "\n"
+             + "Costo        : "  + ((estado == EstadoCita.COMPLETADA) ? Formato.mostrarUnidades(costo) : "Por definir");
     }
 }
