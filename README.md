@@ -60,7 +60,7 @@ Un hospital necesita digitalizar su sistema de gestión. El sistema debe permiti
 | **HU-09** | Como **médico**, quiero registrar el diagnóstico y la receta de una cita para completar la atención del paciente. | Alta | 8 |
 | **HU-10** | Como **médico**, quiero consultar el historial clínico de un paciente incluyendo sus citas anteriores, alergias y grupo sanguíneo para tomar mejores decisiones médicas. | Alta | 5 |
 | **HU-11** | Como **médico**, quiero que el sistema calcule automáticamente el costo de la consulta según mi especialidad para no tener que calcularlo manualmente. | Media | 3 |
-| **HU-12** | Como **cirujano**, quiero registrar las cirugías realizadas para llevar un conteo que se refleje en mi bonificación salarial | Media | 5 |
+| **HU-12** | Como **cirujano**, quiero contar las cirugías realizadas para que se refleje en mi bonificación salarial | Media | 5 |
 | **HU-13** | Como **cirujano**, quiero indicar si estoy disponible para emergencias para que el hospital sepa a quién llamar fuera de horario. | Media | 2 |
 | **HU-14** | Como **enfermero**, quiero registrarme como asistente en una cirugía para que quede constancia de mi participación en el procedimiento. | Baja | 2 |
 | **HU-15** | Como **enfermero**, quiero tener asignados los pacientes a mi cargo para saber a quiénes debo atender durante mi turno. | Media | 3 |
