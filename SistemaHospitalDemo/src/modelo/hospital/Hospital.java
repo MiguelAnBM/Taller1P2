@@ -4,7 +4,6 @@ package modelo.hospital;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections; // Para copias defensivas
 
 import modelo.abstractas.Empleado;
 import modelo.personas.Medico;
@@ -31,9 +30,9 @@ public class Hospital {
     // — Getters —
     public String getNombre() { return nombre; }
     public String getDireccion() { return direccion; }
-    public List<Empleado> getEmpleados() { return Collections.unmodifiableList(empleados); } // Copia defensiva más segura
-    public List<Paciente> getPacientes() { return Collections.unmodifiableList(pacientes); } // Copia defensiva más segura
-    public List<CitaMedica> getCitas() { return Collections.unmodifiableList(citas); } // Copia defensiva más segura
+    public List<Empleado> getEmpleados() { return new ArrayList<>(empleados); }
+    public List<Paciente> getPacientes() { return new ArrayList<>(pacientes); }
+    public List<CitaMedica> getCitas() { return new ArrayList<>(citas); }
     
     // — Setters con validación —
     public void setNombre(String nombre){
@@ -68,31 +67,29 @@ public class Hospital {
         if (paciente == null)
             throw new IllegalArgumentException("El paciente no puede ser nulo.");
         pacientes.add(paciente);
-        System.out.println("\nPaciente " + paciente.getNombreCompleto() + "registrado correctamente.");
+        System.out.println("\nPaciente " + paciente.getNombreCompleto() + " registrado correctamente.");
     }
     
     // Busca, valida y retorna una cita
     public CitaMedica buscarCita(String id) {
-        for (CitaMedica cita : citas) {
-            if (cita.getId().equalsIgnoreCase(id)) { return cita; }
-        }
-        return null;
+        return citas.stream()
+                .filter(c -> c.getId().equalsIgnoreCase(id))
+                .findFirst().orElse(null);
     }
     
     // Método para buscar un paciente por su id
     public Paciente buscarPaciente(String id) {
-        for (Paciente p : pacientes) {
-            if (p.getId().equalsIgnoreCase(id)) { return p; }
-        }
-        return null;
+        return pacientes.stream()
+                .filter(p -> p.getId().equalsIgnoreCase(id))
+                .findFirst().orElse(null);
     }
     
     // Busca, valida y retorna un Médico
-    public  Medico buscarMedico(String id) {
-        for (Empleado empleado : empleados) {
-            if (empleado instanceof Medico medico && medico.getId().equalsIgnoreCase(id)) { return medico; }
-        }
-        return null;
+    public Medico buscarMedico(String id) {
+        return empleados.stream()
+                .filter(e -> e instanceof Medico && e.getId().equalsIgnoreCase(id))
+                .map(e -> (Medico) e)
+                .findFirst().orElse(null);
     }
 
     
@@ -105,6 +102,10 @@ public class Hospital {
         if (!empleados.contains(medico))
             throw new IllegalArgumentException(
                     "El medico " + medico.getNombreCompleto() + " no esta contratado en este hospital.");
+        if (!medico.isActivo()) {
+            throw new IllegalArgumentException(
+                    "El medico " + medico.getNombreCompleto() + " no esta activo actualmente.");
+        }
         if (!pacientes.contains(paciente))
             throw new IllegalArgumentException(
                     "El paciente " + paciente.getNombreCompleto() + " no esta registrado en este hospital.");
@@ -130,8 +131,8 @@ public class Hospital {
     @Override
     public String toString() {
         return "Hospital " + nombre + " | " + direccion + "\n"
-                + "Empleados: " + empleados.size()
-                + "Pacientes: " + pacientes.size()
+                + "Empleados: " + empleados.size() + "\n"
+                + "Pacientes: " + pacientes.size() + "\n"
                 + "Citas: " + citas.size();
     }
     

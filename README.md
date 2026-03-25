@@ -165,13 +165,13 @@ Un hospital necesita digitalizar su sistema de gestión. El sistema debe permiti
 
 Antes de entregar, verifica:
 
-- [ ] Las clases `Persona` y `Empleado` son abstractas y tienen métodos abstractos
-- [ ] Todas las clases hijas implementan los métodos abstractos de sus padres
-- [ ] Se usa `super()` en constructores de todas las clases que heredan
-- [ ] Los getters de colecciones retornan `new ArrayList<>(lista)` (copia defensiva)
-- [ ] Existe al menos una demostración de polimorfismo en la clase principal (ej: recorrer lista heterogénea de empleados y llamar `calcularSalario()`)
-- [ ] Los diagramas UML coinciden con el código implementado
-- [ ] El código compila y ejecuta sin errores
+- [ ✅ ] Las clases `Persona` y `Empleado` son abstractas y tienen métodos abstractos
+- [ ✅ ] Todas las clases hijas implementan los métodos abstractos de sus padres
+- [ ✅ ] Se usa `super()` en constructores de todas las clases que heredan
+- [ ✅ ] Los getters de colecciones retornan `new ArrayList<>(lista)` (copia defensiva)
+- [ ✅ ] Existe al menos una demostración de polimorfismo en la clase principal (ej: recorrer lista heterogénea de empleados y llamar `calcularSalario()`)
+- [ ✅ ] Los diagramas UML coinciden con el código implementado
+- [ ✅ ] El código compila y ejecuta sin errores
 
 ---
 

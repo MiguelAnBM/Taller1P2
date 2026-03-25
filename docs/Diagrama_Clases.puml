@@ -1,0 +1,199 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+package principal {
+    class SistemaHospitalDemo {
+        + {static} main(args: String[]) : void
+    }
+}
+
+package servicios {
+    class LogicaYMenus {
+        - {static} sc : Scanner
+        - {static} hospital : Hospital
+        ..
+        + {static} menuPrincipal() : void
+        - {static} menuGestionDePacientes() : void
+        - {static} menuGestionDePersonal() : void
+        - {static} menuGestionDeCitas() : void
+        - {static} menuDeReportes() : void
+        .. Otros métodos de gestión interna ..
+    }
+
+    class Formato {
+        - {static} df : DecimalFormat
+        - Formato()
+        + {static} mostrarUnidades(valor: double) : String
+    }
+
+    class DatosEmpleado << (R,#FF7700) record >> {
+        id : String
+        nombre : String
+        apellido : String
+        fechaNac : LocalDate
+        email : String
+        legajo : String
+        fechaContratacion : LocalDate
+        salarioBase : double
+    }
+}
+
+package modelo.abstractas {
+    abstract class Persona {
+        - id : String
+        - nombre : String
+        - apellido : String
+        - fechaNacimiento : LocalDate
+        - email : String
+        + {abstract} calcularEdad() : int
+        + {abstract} obtenerTipo() : String
+    }
+
+    abstract class Empleado {
+        - legajo : String
+        - fechaContratacion : LocalDate
+        - salarioBase : double
+        - activo : boolean
+        + {abstract} calcularSalario() : double
+        + antiguedad() : int
+    }
+}
+
+package modelo.personas {
+    class Paciente {
+        - historiaClinicaId : String
+        - grupoSanguineo : String
+        - alergias : List<String>
+        + agregarAlergia(alergia: String) : void
+        + obtenerHistorial() : String
+    }
+
+    class Medico {
+        - numeroLicencia : String
+        - especialidad : Especialidad
+        - pacientesAsignados : List<Paciente>
+        - citasAtendidas : int
+        + atenderPaciente(paciente: Paciente) : void
+        + calcularSalario() : double
+    }
+
+    class Cirujano {
+        - cirugiasRealizadas : int
+        - disponibleEmergencias : boolean
+        + realizarCirugia(paciente: Paciente, tipoCirugia: String) : void
+        + calcularBono() : double
+    }
+
+    class Enfermero {
+        - turno : Turno
+        - areaAsignada : String
+        - pacientesACargo : List<Paciente>
+        + asistirCirugia(cirujano: Cirujano, paciente: Paciente) : void
+        + calcularSalario() : double
+    }
+}
+
+package modelo.hospital {
+    class Hospital {
+        - nombre : String
+        - direccion : String
+        - empleados : List<Empleado>
+        - pacientes : List<Paciente>
+        - citas : List<CitaMedica>
+        + contratarEmpleado(empleado: Empleado) : void
+        + agendarCita(id: String, paciente: Paciente, medico: Medico, fechaHora: LocalDateTime, motivo: String) : CitaMedica
+        + calcularNominaTotal() : double
+    }
+
+    class CitaMedica {
+        - id : String
+        - paciente : Paciente
+        - medico : Medico
+        - fechaHora : LocalDateTime
+        - motivo : String
+        - estado : EstadoCita
+        - costo : double
+        - diagnostico : Diagnostico
+        + calcularCosto() : double
+        + completar(diagnostico: Diagnostico) : void
+        + cancelar() : void
+    }
+
+    class Especialidad {
+        - codigo : String
+        - nombre : String
+        - descripcion : String
+        - costoConsulta : double
+    }
+
+    class Diagnostico {
+        - id : String
+        - descripcion : String
+        - receta : String
+        - fecha : LocalDate
+    }
+}
+
+package modelo.enums {
+    enum EstadoCita {
+        PENDIENTE
+        CONFIRMADA
+        EN_ATENCION
+        COMPLETADA
+        CANCELADA
+    }
+
+    enum Turno {
+        MANANA
+        TARDE
+        NOCHE
+    }
+}
+
+' Relaciones de Herencia
+Persona <|-- Empleado
+Persona <|-- Paciente
+Empleado <|-- Medico
+Empleado <|-- Enfermero
+Medico <|-- Cirujano
+
+' Relaciones de Composición / Agregación / Asociación en Modelos
+Hospital "1" o-- "*" Empleado : empleados
+Hospital "1" o-- "1..*" Paciente : pacientes
+Hospital "1" *-- "*" CitaMedica : citas
+
+CitaMedica "*" o-- "1" Paciente : paciente
+CitaMedica "*" o-- "1" Medico : medico
+CitaMedica "1" *-- "0..1" Diagnostico : diagnostico
+CitaMedica "*" -- "1" EstadoCita : estado
+
+Medico "1" o-- "1" Especialidad : especialidad
+Medico "1" -- "*" Paciente : pacientesAsignados
+Enfermero "1" -- "*" Paciente : pacientesACargo
+Enfermero "*" -- "1" Turno : turno
+Diagnostico "*" o-- "1" Medico : medico
+
+' Relaciones de Servicios y Principal
+SistemaHospitalDemo ..> LogicaYMenus : llama
+LogicaYMenus "1" o-- "1" Hospital : gestiona
+LogicaYMenus ..> DatosEmpleado : usa
+LogicaYMenus ..> Paciente : crea
+LogicaYMenus ..> Medico : crea
+LogicaYMenus ..> Cirujano : crea
+LogicaYMenus ..> Enfermero : crea
+LogicaYMenus ..> CitaMedica : gestiona
+LogicaYMenus ..> Especialidad : usa
+LogicaYMenus ..> Turno : usa
+LogicaYMenus ..> EstadoCita : usa
+
+' Dependencia global de Formato
+Empleado ..> Formato : usa
+Medico ..> Formato : usa
+Cirujano ..> Formato : usa
+Enfermero ..> Formato : usa
+CitaMedica ..> Formato : usa
+Especialidad ..> Formato : usa
+LogicaYMenus ..> Formato : usa
+
+@enduml

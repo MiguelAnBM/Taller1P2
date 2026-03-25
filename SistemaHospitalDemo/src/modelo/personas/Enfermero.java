@@ -4,7 +4,6 @@ package modelo.personas;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections; // Para copias defensivas
 
 import modelo.abstractas.Empleado;
 import modelo.enums.Turno;
@@ -31,7 +30,7 @@ public class Enfermero extends Empleado {
     // — Getters —
     public Turno getTurno(){ return turno; }
     public String getAreaAsignada(){ return areaAsignada; }
-    public List<Paciente> getPacientesACargo(){ return Collections.unmodifiableList(pacientesACargo); } // Copia defensiva más segura
+    public List<Paciente> getPacientesACargo(){ return new ArrayList<>(pacientesACargo); }
     
     // — Setters con validación —
     public void setTurno(Turno turno){
@@ -50,9 +49,11 @@ public class Enfermero extends Empleado {
     
     public void setPacienteACargo(Paciente paciente){
         if (paciente == null){
-            throw new IllegalArgumentException("El paciente no puede estar vacia.");
+            throw new IllegalArgumentException("El paciente no puede estar vacio.");
         }
-        this.pacientesACargo.add(paciente);
+        if (!pacientesACargo.contains(paciente)){
+            this.pacientesACargo.add(paciente);
+        }
     }
     
     // — Otros métodos —
@@ -63,7 +64,9 @@ public class Enfermero extends Empleado {
         System.out.println("Enf. " + getNombreCompleto()
                 + " asiste al Dr. " + cirujano.getNombreCompleto()
                 + " en la cirugia de " + paciente.getNombreCompleto());
-        pacientesACargo.add(paciente);
+        if (!pacientesACargo.contains(paciente)) {
+            pacientesACargo.add(paciente);
+        }
     }
     
     // — Métodos abstractos Heredados —
@@ -74,7 +77,7 @@ public class Enfermero extends Empleado {
     */
     @Override
     public double calcularSalario() {
-        double recargo = getSalarioBase() * turno.getRecargoSalarial() + (antiguedad() * 0.5);
+        double recargo = getSalarioBase() * turno.getRecargoSalarial() + (getSalarioBase() * 0.05 * antiguedad());
         return getSalarioBase() + recargo;
     }
 

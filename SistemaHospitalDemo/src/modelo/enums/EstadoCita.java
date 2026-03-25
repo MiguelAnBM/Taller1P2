@@ -3,6 +3,8 @@ package modelo.enums;
 
 public enum EstadoCita {
     PENDIENTE  ("Pendiente",   "La cita aun no ha sido atendida"),
+    CONFIRMADA ("Confirmada",  "La cita ha sido confirmada por el paciente"),
+    EN_ATENCION("En Atencion", "El paciente esta siendo atendido actualmente"),
     COMPLETADA ("Completada",  "La cita fue atendida con diagnostico"),
     CANCELADA  ("Cancelada",   "La cita fue cancelada antes de realizarse");
 

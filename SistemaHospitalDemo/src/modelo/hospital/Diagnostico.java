@@ -35,13 +35,13 @@ public class Diagnostico {
     // — Setters con validación —
     public void setId(String id){
         if (id == null || id.isBlank())
-            throw new IllegalArgumentException("El ID del diagnóstico no puede estar vacío.");
+            throw new IllegalArgumentException("El ID del diagnostico no puede estar vacio.");
         this.id = id.trim();
     }
     
     public void setDescripcion(String descripcion){
         if (descripcion == null || descripcion.isBlank())
-            throw new IllegalArgumentException("La descripción no puede estar vacía.");
+            throw new IllegalArgumentException("La descripcion no puede estar vacia.");
         this.descripcion = descripcion.trim();
     }
     
@@ -51,7 +51,7 @@ public class Diagnostico {
     
     public void setFecha(LocalDate fecha){
         if (fecha == null)
-            throw new IllegalArgumentException("La fecha del diagnóstico no puede ser nula.");
+            throw new IllegalArgumentException("La fecha del diagnostico no puede ser nula.");
         if (fecha.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("La fecha no puede ser futura: " + fecha);
         this.fecha = fecha;
@@ -59,13 +59,13 @@ public class Diagnostico {
     
     public void setMedico(Medico medico){
         if (medico == null)
-            throw new IllegalArgumentException("El médico no puede ser nulo.");
+            throw new IllegalArgumentException("El medico no puede ser nulo.");
         this.medico = medico;
     }
     
     // — Otros Métodos —
     @Override
     public String toString() {
-        return "Diag.[" + id + "] " + descripcion + " | " + fecha;
+        return "Diag.[" + id + "] " + descripcion + " | Receta: " + receta + " | " + fecha;
     }
 }

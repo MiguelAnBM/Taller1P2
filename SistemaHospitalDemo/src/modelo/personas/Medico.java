@@ -2,7 +2,6 @@ package modelo.personas;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Collections; // Para copias defensivas
 import java.util.ArrayList;
 
 import modelo.abstractas.Empleado;
@@ -33,7 +32,7 @@ public class Medico extends Empleado {
     // — Getters —
     public String getNumeroLicencia() { return numeroLicencia; }
     public Especialidad getEspecialidad() { return especialidad; }
-    public List<Paciente> getPacientesAsignados() { return Collections.unmodifiableList(pacientesAsignados); } // Copia defensiva más segura
+    public List<Paciente> getPacientesAsignados() { return new ArrayList<>(pacientesAsignados); }
     public int getCitasAtendidas() { return citasAtendidas; }
 
     // — Setters con validación —
@@ -56,12 +55,15 @@ public class Medico extends Empleado {
         if (paciente == null){
             throw new IllegalArgumentException("El paciente no puede ser nulo.");
         }
+        if (!isActivo()) {
+            throw new IllegalStateException("El doctor [" + getNombreCompleto() + "] no esta activo y no puede atender pacientes.");
+        }
         if (!pacientesAsignados.contains(paciente)){
             pacientesAsignados.add(paciente);
-            citasAtendidas++;
-            System.out.println("Dr. " + getNombreCompleto()
-                + " atendio a " + paciente.getNombreCompleto());
         }
+        citasAtendidas++;
+        System.out.println("Dr. " + getNombreCompleto()
+            + " atendio a " + paciente.getNombreCompleto());
     }
 
     // — Métodos abstractos Heredados —
@@ -72,7 +74,7 @@ public class Medico extends Empleado {
     */
     @Override
     public double calcularSalario() {
-        double bonusAntiguedad = getSalarioBase() + (0.05 * antiguedad());
+        double bonusAntiguedad = getSalarioBase() * 0.05 * antiguedad();
         double bonusCitas = getSalarioBase() * 0.01 * (citasAtendidas / 10);
         return getSalarioBase() + bonusAntiguedad + bonusCitas;
     }

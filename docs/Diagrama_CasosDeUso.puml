@@ -1,0 +1,100 @@
+@startuml
+skinparam actorStyle awesome
+left to right direction
+
+actor "Recepcionista" as Rec
+actor "Administrador" as Admin
+actor "Médico" as Med
+actor "Cirujano" as Cir
+actor "Enfermero" as Enf
+actor "Paciente" as Pac
+
+' Herencia de actores
+Cir --|> Med
+
+rectangle "Sistema de Gestión Hospitalaria (SGH)" {
+    
+    ' Casos de Uso - Recepcionista
+    usecase "HU-01: Registrar Paciente" as UC01
+    usecase "HU-02: Registrar Alergias" as UC02
+    usecase "HU-03: Agendar Cita Médica" as UC03
+    usecase "HU-04: Cancelar Cita Pendiente" as UC04
+    usecase "Buscar Paciente por ID" as UC_SearchP
+    usecase "Listar Pacientes" as UC_ListP
+    usecase "Confirmar Cita" as UC_ConfC
+    
+    ' Casos de Uso - Administrador
+    usecase "HU-05: Contratar Empleados\n(Médico, Cirujano, Enfermero)" as UC05
+    usecase "HU-06: Calcular Nómina Total" as UC06
+    usecase "HU-07: Registrar Especialidades" as UC07
+    usecase "HU-08: Asignar Turnos a Enfermeros" as UC08
+    usecase "Gestionar Estado de Empleado\n(Activar/Desactivar)" as UC_StatusE
+    usecase "Consultar Salario por Empleado" as UC_SalE
+    usecase "Listar Empleados" as UC_ListE
+    
+    ' Casos de Uso - Médico
+    usecase "HU-09: Registrar Diagnóstico y Receta" as UC09
+    usecase "HU-10: Consultar Historial Médico" as UC10
+    usecase "HU-11: Calcular Costo Automáticamente" as UC11
+    usecase "Atender Cita" as UC_AttendC
+    usecase "Completar Cita" as UC_CompC
+    usecase "Listar Citas por Médico" as UC_ListCM
+    
+    ' Casos de Uso - Cirujano
+    usecase "HU-12: Registrar Cirugías Realizadas" as UC12
+    usecase "HU-13: Modificar Disponibilidad Emergencias" as UC13
+    
+    ' Casos de Uso - Enfermero
+    usecase "HU-14: Asistir Cirugía" as UC14
+    usecase "HU-15: Consultar Pacientes a Cargo" as UC15
+    usecase "Reasignar Turno" as UC_ReTurn
+    
+    ' Casos de Uso - Paciente
+    usecase "HU-16: Consultar Historial de Citas Propias" as UC16
+}
+
+' Relaciones Recepcionista
+Rec --> UC01
+Rec --> UC02
+Rec --> UC03
+Rec --> UC04
+Rec --> UC_SearchP
+Rec --> UC_ListP
+Rec --> UC_ConfC
+
+' Relaciones Administrador
+Admin --> UC05
+Admin --> UC06
+Admin --> UC07
+Admin --> UC08
+Admin --> UC_StatusE
+Admin --> UC_SalE
+Admin --> UC_ListE
+
+' Relaciones Médico
+Med --> UC09
+Med --> UC10
+Med --> UC_AttendC
+Med --> UC_CompC
+Med --> UC_ListCM
+
+' UC11 es automático por el sistema cuando se agendan o completan citas
+UC03 ..> UC11 : <<include>>
+UC_CompC ..> UC11 : <<include>>
+UC_CompC ..> UC09 : <<include>>
+
+' Relaciones Cirujano
+Cir --> UC12
+Cir --> UC13
+
+' Relaciones Enfermero
+Enf --> UC14
+Enf --> UC15
+Enf --> UC_ReTurn
+
+' Relaciones Paciente
+Pac --> UC16
+
+' Notas
+note bottom of UC11 : El sistema calcula el costo automáticamente\nsegún la especialidad.
+@enduml

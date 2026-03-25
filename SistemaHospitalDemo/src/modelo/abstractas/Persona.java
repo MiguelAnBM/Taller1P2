@@ -71,7 +71,7 @@ public abstract class Persona {
     }
 
     // ── Otros Métodos — 
-    public int calcularEdad() { return LocalDate.now().getYear() - getFechaNacimiento().getYear(); };
+    public abstract int calcularEdad();
     
     // ── Métodos abstractos — 
     public abstract String obtenerTipo(); 

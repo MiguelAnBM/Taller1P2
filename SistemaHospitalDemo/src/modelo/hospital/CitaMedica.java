@@ -96,9 +96,27 @@ public class CitaMedica {
         return costo;
     }
     
-    public void completar(Diagnostico diagnostico) {
+    public void confirmar() {
         if (estado != EstadoCita.PENDIENTE) {
-            System.err.println("Cita [" + id + "] no puede completarse. Estado: "
+            System.err.println("Cita [" + id + "] no puede confirmarse. Estado: " + estado.getEstado());
+            return;
+        }
+        this.estado = EstadoCita.CONFIRMADA;
+        System.out.println("Cita [" + id + "] confirmada.");
+    }
+
+    public void atender() {
+        if (estado != EstadoCita.CONFIRMADA) {
+            System.err.println("Cita [" + id + "] no puede pasar a atencion. Debe estar CONFIRMADA. Estado actual: " + estado.getEstado());
+            return;
+        }
+        this.estado = EstadoCita.EN_ATENCION;
+        System.out.println("Cita [" + id + "] ahora esta EN ATENCION.");
+    }
+
+    public void completar(Diagnostico diagnostico) {
+        if (estado != EstadoCita.EN_ATENCION) {
+            System.err.println("Cita [" + id + "] no puede completarse. Debe estar EN ATENCION. Estado: "
                     + estado.getEstado());
             return;
         }
@@ -113,7 +131,7 @@ public class CitaMedica {
     }
     
     public void cancelar() {
-        if (estado != EstadoCita.PENDIENTE) {
+        if (estado != EstadoCita.PENDIENTE && estado != EstadoCita.CONFIRMADA) {
             System.err.println("Cita [" + id + "] no puede cancelarse. Estado: "
                     + estado.getEstado());
             return;
@@ -131,6 +149,7 @@ public class CitaMedica {
              + "Fecha y Hora : " + fechaHora + "\n"
              + "Estado       : " + estado.getEstado() + "\n"
              + "Diagnostico  : " + ((diagnostico == null) ? "Por definir" : diagnostico.getDescripcion()) + "\n"
+             + "Receta       : " + ((diagnostico == null) ? "Por definir" : diagnostico.getReceta()) + "\n"
              + "Costo        : "  + ((estado == EstadoCita.COMPLETADA) ? Formato.mostrarUnidades(costo) : "Por definir");
     }
 }

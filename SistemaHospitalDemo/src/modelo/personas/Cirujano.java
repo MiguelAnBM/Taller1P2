@@ -56,7 +56,7 @@ public class Cirujano extends Medico {
     */
     @Override
     public double calcularSalario() {
-        return super.calcularSalario() + calcularBono() + (antiguedad() * 0.5);
+        return super.calcularSalario() + calcularBono();
     }
 
     @Override

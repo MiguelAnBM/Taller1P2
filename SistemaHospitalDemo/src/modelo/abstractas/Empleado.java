@@ -1,4 +1,4 @@
-package modelo.abstractas;
+ package modelo.abstractas;
 
 import java.time.LocalDate;
 import java.time.Period; // Para retornar años más fácilmente
@@ -59,16 +59,14 @@ public abstract class Empleado extends Persona {
     // Retorna los años transcurridos desde la fecha de contratación
     public int antiguedad() {
         return Period.between(fechaContratacion, LocalDate.now()).getYears();
-    }
+    } 
     
-    // — Métodos abstractos Heredados —
-    // calcularEdad() implementado aquí para todos los Empleados
+    // — Métodos abstractos propios y heredados —
     @Override
     public int calcularEdad() {
         return Period.between(getFechaNacimiento(), LocalDate.now()).getYears();
     }
     
-    // — Métodos abstractos propios —
     public abstract double calcularSalario();
     
     // — Otros Métodos —
